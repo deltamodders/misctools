@@ -1,5 +1,6 @@
 const fs = require('fs');
 const chalk = require('chalk');
+//a
 
 console.clear();
 console.log(chalk.blue('MiscTools Builder') + "\nAuthor: GhinoRhino");
