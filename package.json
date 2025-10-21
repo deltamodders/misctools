@@ -1,0 +1,23 @@
+{
+  "name": "misctools",
+  "version": "1.0.0",
+  "description": "Deltamod tools for the web",
+  "homepage": "https://github.com/deltamodders/misctools#readme",
+  "bugs": {
+    "url": "https://github.com/deltamodders/misctools/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deltamodders/misctools.git"
+  },
+  "license": "EUPL-1.2",
+  "author": "ghinorhino",
+  "type": "commonjs",
+  "main": "buildMisctools.js",
+  "scripts": {
+    "build": "node buildMisctools.js"
+  },
+  "dependencies": {
+    "chalk": "^4.0.0"
+  }
+}
