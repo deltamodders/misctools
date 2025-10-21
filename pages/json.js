@@ -57,7 +57,7 @@ function generateJSON() {
             author: i('metadata.authors').split(',').map(s => s.trim()).filter(s => s.length > 0),
             url: i('metadata.url'),
             tags: document.querySelectorAll('input[name="metadata.tags"]:checked').length > 0 ? Array.from(document.querySelectorAll('input[name="metadata.tags"]:checked')).map(cb => cb.dataset.value) : undefined,
-            demoMod: Boolean(i('metadata.demoMod')),
+            demoMod: (i('metadata.demoMod') == 'true' ? true : false),
             packageID: i('metadata.packageID.1') + '.' + i('metadata.packageID.2') + '.' + i('metadata.packageID.3')
         },
         deltaruneTargetVersion: i('deltaruneTargetVersion'),
