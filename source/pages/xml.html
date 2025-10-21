@@ -1,0 +1,31 @@
+<b>Generate a <code>modding.xml</code> file</b>
+<br><br>
+<i>Before proceeding with making a modding.xml, we ask you to read the Deltamod Modding Standard</i>
+<br>
+<hr>
+<table>
+    <colgroup>
+        <col style="width: 15%;">
+        <col style="width: 40%;">
+        <col style="width: 40%;">
+        <col style="width: 5%;">
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Patch type (XDelta, Override..)</th>
+            <th>Patch file (ex. <code>./myModpackPatch.xdelta</code>)</th>
+            <th>Patch destination (ex. <code>./chapter1_windows/data.win</code>)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="patchBody">
+        <!-- Rows will be added here dynamically -->
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4"><button style="width: 100%; padding: 10px; font-size: 1em; cursor: pointer;" onclick="addPatch()">Add</button></td>
+        </tr>
+    </tfoot>
+    </table>
+<hr>
+<button onclick="generateXML()">Generate <code>modding.xml</code> file</button>

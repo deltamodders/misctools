@@ -1,5 +1,6 @@
 const fs = require('fs');
 const chalk = require('chalk');
+const express = require('express');
 //a
 
 console.clear();
@@ -36,6 +37,10 @@ fs.mkdirSync('./docs');
 
         fs.copyFileSync('./source/base/base.css', './docs/' + pageFile.replace('.pageattr','.css'));
 
+        if (fs.existsSync('./source/pages/' + pageFile.replace('.pageattr', '.css'))) {
+            console.log(chalk.blue('Cooking CSS for page: ') + pageFile.replace('.pageattr', ''));
+            fs.appendFileSync('./docs/' + pageFile.replace('.pageattr', '.css'), '\n/* Custom CSS for ' + pageFile.replace('.pageattr', '') + ' */\n' + fs.readFileSync('./source/pages/' + pageFile.replace('.pageattr', '.css'), 'utf-8'));
+        }
         console.log(chalk.green('Built page ') + '"' + pageFile.replace('.pageattr', '') + '" - "' + pageattr.h1title + '"');
     }
 
@@ -46,4 +51,16 @@ fs.mkdirSync('./docs');
     }
 
     console.log(chalk.yellowBright('Build complete in ' + ((process.uptime()) .toFixed(2)) + ' seconds.'));
+
+    if (process.argv.includes('--serve')) {
+        const app = express();
+        const port = process.env.PORT || 3000;
+
+        app.use(express.static('docs'));
+
+        app.listen(port, () => {
+            console.log(chalk.cyan(`Serving MiscTools at http://localhost:${port}`));
+            require('child_process').exec(`start http://localhost:${port}`);
+        });
+    }
 })();

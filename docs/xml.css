@@ -119,11 +119,3 @@ table tr:nth-child(even) {
 table tr:hover {
     background-color: #e0e0e0;
 }
-/* Custom CSS for index */
-button {
-    width: 100%;
-    text-align: left;
-    padding: 20px;
-    font-size: 14px;
-    cursor: pointer;
-}

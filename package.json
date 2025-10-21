@@ -15,9 +15,11 @@
   "type": "commonjs",
   "main": "buildMisctools.js",
   "scripts": {
-    "build": "node buildMisctools.js"
+    "build": "node buildMisctools.js",
+    "test": "node buildMisctools.js --serve"
   },
   "dependencies": {
-    "chalk": "^4.0.0"
+    "chalk": "^4.0.0",
+    "express": "^5.1.0"
   }
 }
