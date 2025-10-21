@@ -54,7 +54,7 @@ function generateJSON() {
             name: i('metadata.name'),
             version: i('metadata.version'),
             description: i('metadata.description'),
-            authors: i('metadata.authors').split(',').map(s => s.trim()).filter(s => s.length > 0),
+            author: i('metadata.authors').split(',').map(s => s.trim()).filter(s => s.length > 0),
             url: i('metadata.url'),
             tags: document.querySelectorAll('input[name="metadata.tags"]:checked').length > 0 ? Array.from(document.querySelectorAll('input[name="metadata.tags"]:checked')).map(cb => cb.dataset.value) : undefined,
             demoMod: Boolean(i('metadata.demoMod')),
