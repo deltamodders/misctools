@@ -1,0 +1,62 @@
+<b>Create a <code>_deltamodInfo.json</code> file</b>
+<br>
+<hr>
+<div>
+    <p><deltamod-icon></deltamod-icon> <deltahub-icon></deltahub-icon> <b>Metadata</b></p>
+    <input type="text" placeholder="Mod name" id="metadata.name">
+    <textarea placeholder="Mod description (max. 100 chars)" id="metadata.description" maxlength="100"></textarea>
+    <input type="text" placeholder="Mod authors" id="metadata.authors">
+    <input type="text" placeholder="Mod version" id="metadata.version">
+    <input type="url" name="metadata.url" id="metadata.url" placeholder="Mod website URL">
+    <p><deltamod-icon></deltamod-icon> <b>Package ID</b></p>
+    <div class="pid" style="display: flex; justify-content: left; align-items: center;">
+        <input type="text" placeholder="website" id="metadata.packageID.1" oninput="lowercase(this)">
+        <span style="margin: 0 5px;">.</span>
+        <input type="text" placeholder="mod" id="metadata.packageID.2" oninput="lowercase(this)">
+        <span style="margin: 0 5px;">.</span>
+        <input type="text" placeholder="author" id="metadata.packageID.3" oninput="lowercase(this)">
+    </div>
+    <p><b>Mod information</b></p>
+    <span style="display: block; font-size: small;"><i>Select the type of DELTARUNE this mod is for:</i></span>
+    <select name="metadata.demoMod" id="metadata.demoMod">
+        <option value="null" style="display: none;">Select an option </option>
+        <option value="false">Full version</option>
+        <option value="true">Demo version</option>
+    </select>
+    <br>
+    <input type="text" placeholder="Target DELTARUNE version" id="deltaruneTargetVersion">
+    <p><deltahub-icon></deltahub-icon> <b>Mod tags</b></p>
+    <div class="checkboxArray">
+        <label><input type="checkbox" name="metadata.tags" data-value="translation"> translation</label>
+        <label><input type="checkbox" name="metadata.tags" data-value="text"> text</label>
+        <label><input type="checkbox" name="metadata.tags" data-value="customization"> customization</label>
+        <label><input type="checkbox" name="metadata.tags" data-value="gameplay"> gameplay</label>
+        <label><input type="checkbox" name="metadata.tags" data-value="other"> other</label>
+    </div>
+    <p><deltamod-icon></deltamod-icon> <b>Mod needed files</b></p>
+    <button style="margin-bottom: 10px;" onclick="openhashes()">Open hashing tool (external)</button>
+    <table>
+        <colgroup>
+            <col style="width: 40%;">
+            <col style="width: 40%;">
+            <col style="width: 20%;">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>File path (ex. <code>./chapter1_windows/data.win</code>)</th>
+                <th>File hash</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="fileTableBody">
+            <!-- Rows will be added here dynamically -->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3"><button style="width: 100%; padding: 10px; font-size: 1em; cursor: pointer;" onclick="addNeededFile()">Add</button></td>
+            </tr>
+        </tfoot>
+    </table>
+    <br><hr><br>
+    <button id="generateBtn" onclick="generateJSON()">Generate JSON file</button>
+</div>
