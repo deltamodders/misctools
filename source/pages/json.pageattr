@@ -1,4 +1,4 @@
 {
     "h1title": "Create Deltamod JSON file",
-    "h1desc": "Create a _deltamodInfo.json file for use in Deltamod"
+    "h1desc": "Create a meta.json file for use in Deltamod"
 }

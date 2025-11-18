@@ -1,4 +1,4 @@
-<!-- Generated at compile-time by MiscTools Builder on 2025-10-21T17:19:56.869Z -->
+<!-- Generated at compile-time by MiscTools Builder on 2025-11-18T14:20:03.354Z -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,10 +11,10 @@
 <body>
     <div class="header">
         <h1 id="h1title">Create Deltamod JSON file</h1>
-        <p style="margin-bottom: 0;" id="h1desc">Create a _deltamodInfo.json file for use in Deltamod</p>
+        <p style="margin-bottom: 0;" id="h1desc">Create a meta.json file for use in Deltamod</p>
     </div>
     <div class="main" style="min-height: calc(100% - 220px);">
-        <b>Create a <code>_deltamodInfo.json</code> file</b>
+        <b>Create a <code>meta.json</code> file</b>
 <br>
 <hr>
 <div>
@@ -159,7 +159,7 @@ function generateJSON() {
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
-    a.download = '_deltamodInfo.json';
+    a.download = 'meta.json';
     a.click();
     URL.revokeObjectURL(url);
 }
