@@ -16,7 +16,11 @@
         <span style="margin: 0 5px;">.</span>
         <input type="text" placeholder="author" id="metadata.packageID.3" oninput="lowercase(this)">
     </div>
-    <p><b>Mod information</b></p>
+    <p><deltamod-icon></deltamod-icon> <b>Mod dominant color</b></p>
+    <small>(Select a color which goes well with your mod icon. If your mod doesn't have an icon, <button onclick="metaColorBlack()">click here</button>.)</small>
+    <br>
+    <input type="color" name="metadata.color" id="metadata.color" style="width: 100px; height: 100px;">
+    <p><deltamod-icon></deltamod-icon> <deltahub-icon></deltahub-icon> <b>Mod information</b></p>
     <span style="display: block; font-size: small;"><i>Select the type of DELTARUNE this mod is for:</i></span>
     <select name="metadata.demoMod" id="metadata.demoMod">
         <option value="null" style="display: none;">Select an option </option>

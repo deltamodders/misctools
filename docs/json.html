@@ -1,4 +1,4 @@
-<!-- Generated at compile-time by MiscTools Builder on 2025-11-18T14:20:03.354Z -->
+<!-- Generated at compile-time by MiscTools Builder on 2025-12-03T10:32:31.748Z -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +32,11 @@
         <span style="margin: 0 5px;">.</span>
         <input type="text" placeholder="author" id="metadata.packageID.3" oninput="lowercase(this)">
     </div>
-    <p><b>Mod information</b></p>
+    <p><deltamod-icon></deltamod-icon> <b>Mod dominant color</b></p>
+    <small>(Select a color which goes well with your mod icon. If your mod doesn't have an icon, <button onclick="metaColorBlack()">click here</button>.)</small>
+    <br>
+    <input type="color" name="metadata.color" id="metadata.color" style="width: 100px; height: 100px;">
+    <p><deltamod-icon></deltamod-icon> <deltahub-icon></deltahub-icon> <b>Mod information</b></p>
     <span style="display: block; font-size: small;"><i>Select the type of DELTARUNE this mod is for:</i></span>
     <select name="metadata.demoMod" id="metadata.demoMod">
         <option value="null" style="display: none;">Select an option </option>
@@ -121,6 +125,10 @@ function addNeededFile() {
     tbody.appendChild(newRow);
 }
 
+function metaColorBlack() {
+    document.getElementById('metadata.color').value = '#000000';
+}
+
 function openhashes() {
     window.open('https://emn178.github.io/online-tools/sha256.html?ref=deltamod_misctools', '_blank');
 }
@@ -130,6 +138,21 @@ function generateJSON() {
         return document.getElementById(id).value;
     }
 
+    var colorValue = document.getElementById('metadata.color').value;
+    function hexToRgb(hex) {
+        hex = (hex || '').replace(/^#/, '');
+        if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+        if (!/^[0-9a-fA-F]{6}$/.test(hex)) return { r: 0, g: 0, b: 0 };
+        const intVal = parseInt(hex, 16);
+        return {
+            r: (intVal >> 16) & 255,
+            g: (intVal >> 8) & 255,
+            b: intVal & 255
+        };
+    }
+
+    colorValue = hexToRgb(colorValue);
+
     var compiledJSON = {
         metadata: {
             name: i('metadata.name'),
@@ -137,6 +160,7 @@ function generateJSON() {
             description: i('metadata.description'),
             author: i('metadata.authors').split(',').map(s => s.trim()).filter(s => s.length > 0),
             url: i('metadata.url'),
+            color: { r: colorValue.r, g: colorValue.g, b: colorValue.b },
             tags: document.querySelectorAll('input[name="metadata.tags"]:checked').length > 0 ? Array.from(document.querySelectorAll('input[name="metadata.tags"]:checked')).map(cb => cb.dataset.value) : undefined,
             demoMod: (i('metadata.demoMod') == 'true' ? true : false),
             packageID: i('metadata.packageID.1') + '.' + i('metadata.packageID.2') + '.' + i('metadata.packageID.3')

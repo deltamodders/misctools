@@ -40,6 +40,10 @@ function addNeededFile() {
     tbody.appendChild(newRow);
 }
 
+function metaColorBlack() {
+    document.getElementById('metadata.color').value = '#000000';
+}
+
 function openhashes() {
     window.open('https://emn178.github.io/online-tools/sha256.html?ref=deltamod_misctools', '_blank');
 }
@@ -49,6 +53,21 @@ function generateJSON() {
         return document.getElementById(id).value;
     }
 
+    var colorValue = document.getElementById('metadata.color').value;
+    function hexToRgb(hex) {
+        hex = (hex || '').replace(/^#/, '');
+        if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+        if (!/^[0-9a-fA-F]{6}$/.test(hex)) return { r: 0, g: 0, b: 0 };
+        const intVal = parseInt(hex, 16);
+        return {
+            r: (intVal >> 16) & 255,
+            g: (intVal >> 8) & 255,
+            b: intVal & 255
+        };
+    }
+
+    colorValue = hexToRgb(colorValue);
+
     var compiledJSON = {
         metadata: {
             name: i('metadata.name'),
@@ -56,6 +75,7 @@ function generateJSON() {
             description: i('metadata.description'),
             author: i('metadata.authors').split(',').map(s => s.trim()).filter(s => s.length > 0),
             url: i('metadata.url'),
+            color: { r: colorValue.r, g: colorValue.g, b: colorValue.b },
             tags: document.querySelectorAll('input[name="metadata.tags"]:checked').length > 0 ? Array.from(document.querySelectorAll('input[name="metadata.tags"]:checked')).map(cb => cb.dataset.value) : undefined,
             demoMod: (i('metadata.demoMod') == 'true' ? true : false),
             packageID: i('metadata.packageID.1') + '.' + i('metadata.packageID.2') + '.' + i('metadata.packageID.3')
