@@ -1,7 +1,31 @@
 var cachedneededfiles = [];
 
-function addNeededFile() {
+function addNeededFile(fillName = '', fillHash = '', askQuest = true) {
     var uid = Date.now().toString() + Math.floor(Math.random() * 1000).toString();
+
+    if (askQuest) {
+        var importFile = window.confirm('Do you want to import a file to fill in its path and hash? Click "Cancel" to add an empty entry.');
+        if (importFile) {
+            var fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.onchange = async function(event) {
+                var file = event.target.files[0];
+                if (file) {
+                    var arrayBuffer = await file.arrayBuffer();
+                    var hash = await sha256(arrayBuffer);
+
+                    fillName = "./" + file.name;
+                    fillHash = hash;
+
+                    addNeededFile(fillName, fillHash, false);
+
+                    window.alert('File imported successfully!\n\nNote that the path generated supposes the file will be in the root of the mod package.');
+                }
+            };
+            fileInput.click();
+            return;
+        }
+    }
 
     var tbody = document.getElementsByTagName('tbody')[0];
     var newRow = document.createElement('tr');
@@ -11,6 +35,7 @@ function addNeededFile() {
     input1.type = 'text';
     input1.name = 'neededfile';
     input1.placeholder = './path/to/file.ext';
+    input1.value = fillName;
     td1.appendChild(input1);
 
     var td2 = document.createElement('td');
@@ -18,6 +43,7 @@ function addNeededFile() {
     input2.type = 'text';
     input2.name = 'neededfilehash';
     input2.placeholder = 'SHA256 hash';
+    input2.value = fillHash;
     td2.appendChild(input2);
 
     var td3 = document.createElement('td');
@@ -44,9 +70,18 @@ function metaColorBlack() {
     document.getElementById('metadata.color').value = '#000000';
 }
 
-function openhashes() {
-    window.open('https://emn178.github.io/online-tools/sha256.html?ref=deltamod_misctools', '_blank');
+// Source - https://stackoverflow.com/a
+// Posted by Vitaly Zdanevich, modified by community. See post 'Timeline' for change history
+// Edited partially to support file hashing
+// Retrieved 2025-12-16, License - CC BY-SA 4.0
+
+async function sha256(msgBuffer) {          
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));        
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
 }
+
 
 function generateJSON() {
     function i(id) {
@@ -68,6 +103,23 @@ function generateJSON() {
 
     colorValue = hexToRgb(colorValue);
 
+    if (
+        i('metadata.name').trim().length === 0 ||
+        i('metadata.version').trim().length === 0 ||
+        i('metadata.description').trim().length === 0 ||
+        i('metadata.authors').trim().length === 0
+    ) {
+        alert('Please fill in all required metadata fields (Name, Version, Description, Authors).');
+        return;
+    }
+
+    if (i('metadata.packageID.1').trim().length === 0 ||
+        i('metadata.packageID.2').trim().length === 0 ||
+        i('metadata.packageID.3').trim().length === 0) {
+        alert('Please fill in all parts of the Package ID.');
+        return;
+    }
+
     var compiledJSON = {
         metadata: {
             name: i('metadata.name'),
@@ -81,7 +133,10 @@ function generateJSON() {
             packageID: i('metadata.packageID.1') + '.' + i('metadata.packageID.2') + '.' + i('metadata.packageID.3')
         },
         deltaruneTargetVersion: i('deltaruneTargetVersion'),
-        neededFiles: []
+        neededFiles: [],
+        exporter: {
+            tool: 'MiscTools'
+        }
     };
 
     cachedneededfiles.forEach(item => {

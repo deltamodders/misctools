@@ -6,8 +6,13 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    background-color: rgb(185, 185, 185);
+    background-color: rgb(43, 43, 43);
+    color: white;
     animation: fadeIn 0.5s ease-in-out;
+}
+
+.header > * {
+    color: white;
 }
 
 @keyframes fadeIn {
@@ -55,7 +60,7 @@ input:not([type="checkbox"]), textarea, select {
 }
 
 .main {
-    background-color: #ffffff;
+    background-color: #efefef;
     padding: 20px;
     margin: 10px;
     border-radius: 10px;

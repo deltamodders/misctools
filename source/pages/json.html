@@ -3,12 +3,13 @@
 <hr>
 <div>
     <p><deltamod-icon></deltamod-icon> <deltahub-icon></deltahub-icon> <b>Metadata</b></p>
-    <input type="text" placeholder="Mod name" id="metadata.name">
-    <textarea placeholder="Mod description (max. 100 chars)" id="metadata.description" maxlength="100"></textarea>
-    <input type="text" placeholder="Mod authors" id="metadata.authors">
-    <input type="text" placeholder="Mod version" id="metadata.version">
+    <input type="text" placeholder="Mod name (Required)" id="metadata.name">
+    <textarea placeholder="Mod description (max. 100 chars) (Required)" id="metadata.description" maxlength="100"></textarea>
+    <input type="text" placeholder="Mod authors (Required)" id="metadata.authors">
+    <input type="text" placeholder="Mod version (Required)" id="metadata.version">
     <input type="url" name="metadata.url" id="metadata.url" placeholder="Mod website URL">
     <p><deltamod-icon></deltamod-icon> <b>Package ID</b></p>
+    <span><i>(This is a required field.)</i></span>
     <div class="pid" style="display: flex; justify-content: left; align-items: center;">
         <input type="text" placeholder="website" id="metadata.packageID.1" oninput="lowercase(this)">
         <span style="margin: 0 5px;">.</span>
@@ -38,7 +39,6 @@
         <label><input type="checkbox" name="metadata.tags" data-value="other"> other</label>
     </div>
     <p><deltamod-icon></deltamod-icon> <b>Mod needed files</b></p>
-    <button style="margin-bottom: 10px;" onclick="openhashes()">Open hashing tool (external)</button>
     <table>
         <colgroup>
             <col style="width: 40%;">
