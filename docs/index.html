@@ -1,4 +1,4 @@
-<!-- Generated at compile-time by MiscTools Builder on 2025-12-16T16:32:55.629Z -->
+<!-- Generated at compile-time by MiscTools Builder on 2025-12-20T16:59:42.628Z -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +7,7 @@
     <link rel="icon" href="/favicon.png" type="image/png">
     <title>Deltamod MiscTools - MiscTools</title>
     <link rel="stylesheet" href="index.css">
+    <link rel="manifest" href="./manifest.json">
 </head>
 <body>
     <div class="header">
@@ -21,6 +22,22 @@
 <button onclick="window.location.replace('./xml.html')">Create <code>modding.xml</code> file</button>
     </div>
 </body>
+<!-- service worker -->
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker
+                .register('/worker.js')
+                .then((registration) => {
+                    console.log('Service Worker registered with scope: ', registration.scope);
+                })
+                .catch((error) => {
+                    console.log('Service Worker registration failed: ', error);
+                });
+        });
+    }
+
+</script>
 <script>
     
 </script>

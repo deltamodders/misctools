@@ -7,6 +7,7 @@
     <link rel="icon" href="/favicon.png" type="image/png">
     <title>Deltamod MiscTools - $H1TITLE</title>
     <link rel="stylesheet" href="$INTERNALNAME.css">
+    <link rel="manifest" href="./manifest.json">
 </head>
 <body>
     <div class="header">
@@ -17,6 +18,22 @@
         $CONTENT
     </div>
 </body>
+<!-- service worker -->
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker
+                .register('/worker.js')
+                .then((registration) => {
+                    console.log('Service Worker registered with scope: ', registration.scope);
+                })
+                .catch((error) => {
+                    console.log('Service Worker registration failed: ', error);
+                });
+        });
+    }
+
+</script>
 <script>
     $CODE
 </script>
