@@ -107,9 +107,10 @@ function generateJSON() {
         i('metadata.name').trim().length === 0 ||
         i('metadata.version').trim().length === 0 ||
         i('metadata.description').trim().length === 0 ||
-        i('metadata.authors').trim().length === 0
+        i('metadata.authors').trim().length === 0 ||
+        i('metadata.game').trim() == 'null'
     ) {
-        alert('Please fill in all required metadata fields (Name, Version, Description, Authors).');
+        alert('Please fill in all required metadata fields (Name, Version, Description, Authors, Game).');
         return;
     }
 
@@ -129,7 +130,7 @@ function generateJSON() {
             url: i('metadata.url'),
             color: { r: colorValue.r, g: colorValue.g, b: colorValue.b },
             tags: document.querySelectorAll('input[name="metadata.tags"]:checked').length > 0 ? Array.from(document.querySelectorAll('input[name="metadata.tags"]:checked')).map(cb => cb.dataset.value) : undefined,
-            demoMod: (i('metadata.demoMod') == 'true' ? true : false),
+            game: i('metadata.game') || 'toby.deltarune',
             packageID: i('metadata.packageID.1') + '.' + i('metadata.packageID.2') + '.' + i('metadata.packageID.3')
         },
         deltaruneTargetVersion: i('deltaruneTargetVersion'),
@@ -156,4 +157,15 @@ function generateJSON() {
     a.download = 'meta.json';
     a.click();
     URL.revokeObjectURL(url);
+}
+
+function toggleDhubVER() {
+    var gameSelect = document.getElementById('metadata.game');
+    var dhubVerDiv = document.querySelector('.deltahubTargetVer');
+    if (gameSelect.value === 'toby.deltarune' || gameSelect.value === 'toby.deltarune.demo') {
+        dhubVerDiv.style.display = 'block';
+    } else {
+        dhubVerDiv.style.display = 'none';
+        document.getElementById('deltaruneTargetVersion').value = '';
+    }
 }

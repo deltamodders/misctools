@@ -21,22 +21,26 @@
     <small>(Select a color which goes well with your mod icon. If your mod doesn't have an icon, <button onclick="metaColorBlack()">click here</button>.)</small>
     <br>
     <input type="color" name="metadata.color" id="metadata.color" style="width: 100px; height: 100px;">
-    <p><deltamod-icon></deltamod-icon> <deltahub-icon></deltahub-icon> <b>Mod information</b></p>
-    <span style="display: block; font-size: small;"><i>Select the type of DELTARUNE this mod is for:</i></span>
-    <select name="metadata.demoMod" id="metadata.demoMod">
+    <p><deltamod-icon></deltamod-icon> <b>Target game</b></p>
+    <select name="metadata.game" id="metadata.game" oninput="toggleDhubVER()">
         <option value="null" style="display: none;">Select an option </option>
-        <option value="false">Full version</option>
-        <option value="true">Demo version</option>
+        <option value="toby.deltarune">Deltarune - full version</option>
+        <option value="toby.deltarune.demo">Deltarune - demo version</option>
+        <option value="toby.undertale">Undertale</option>
+        <option value="fans.utyellow">Undertale Yellow</option>
     </select>
-    <br>
-    <input type="text" placeholder="Target DELTARUNE version" id="deltaruneTargetVersion">
-    <p><deltahub-icon></deltahub-icon> <b>Mod tags</b></p>
-    <div class="checkboxArray">
-        <label><input type="checkbox" name="metadata.tags" data-value="translation"> translation</label>
-        <label><input type="checkbox" name="metadata.tags" data-value="text"> text</label>
-        <label><input type="checkbox" name="metadata.tags" data-value="customization"> customization</label>
-        <label><input type="checkbox" name="metadata.tags" data-value="gameplay"> gameplay</label>
-        <label><input type="checkbox" name="metadata.tags" data-value="other"> other</label>
+    <div class="deltahubTargetVer" style="display: none;">
+        <p><deltahub-icon></deltahub-icon> <b>DELTARUNE target version</b></p>
+        <input type="text" placeholder="Target DELTARUNE version" id="deltaruneTargetVersion">
+        <small>Please note that Deltahub does not have support for the new Standard X, and as such doesn't support non-Deltarune games. Keep this field blank if making a non-DELTARUNE mod.</small>
+        <p><deltahub-icon></deltahub-icon> <b>Mod tags</b></p>
+        <div class="checkboxArray">
+            <label><input type="checkbox" name="metadata.tags" data-value="translation"> translation</label>
+            <label><input type="checkbox" name="metadata.tags" data-value="text"> text</label>
+            <label><input type="checkbox" name="metadata.tags" data-value="customization"> customization</label>
+            <label><input type="checkbox" name="metadata.tags" data-value="gameplay"> gameplay</label>
+            <label><input type="checkbox" name="metadata.tags" data-value="other"> other</label>
+        </div>
     </div>
     <p><deltamod-icon></deltamod-icon> <b>Mod needed files</b></p>
     <table>
