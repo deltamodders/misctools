@@ -1,12 +1,12 @@
-<!-- Generated at compile-time by MiscTools Builder on 2026-08-26T10:18:20.535Z -->
+<!-- Generated at compile-time by MiscTools Builder on 2026-08-26T10:18:20.507Z -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/favicon.png" type="image/png">
-    <title>Deltamod MiscTools - Create Deltamod XML file</title>
-    <link rel="stylesheet" href="xml.css">
+    <title>Deltamod MiscTools - Create Deltamod modpack</title>
+    <link rel="stylesheet" href="modpack.css">
     <link rel="manifest" href="./manifest.json">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,17 +29,15 @@
         <div>
             <button onclick="history.back();" class="circle_button"><span class="material-symbols-outlined">arrow_back</span></button>
         </div>
-        <h1 id="h1title">Create Deltamod XML file</h1>
-        <p style="margin-bottom: 0;" id="h1desc">Create a modding.xml file for use in Deltamod</p>
+        <h1 id="h1title">Create Deltamod modpack</h1>
+        <p style="margin-bottom: 0;" id="h1desc">Create a very simple Deltamod modpack for use in Deltamod.</p>
     </div>
     <div class="main" style="overflow-y: scroll;">
         <b>Generate a <code>modding.xml</code> file</b>
+<br><br>
+<i>Before proceeding with making a modding.xml, we ask you to read the Deltamod Modding Standard</i>
 <br>
 <hr>
-<button class="icon_holder" onclick="loadXML()">
-    <span class="material-symbols-outlined">upload</span> Import existing <code>modding.xml</code> file
-</button>
-<br>
 <table>
     <colgroup>
         <col style="width: 15%;">
@@ -60,16 +58,12 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="4">
-                <button style="width: 100%; padding: 10px; font-size: 1em; cursor: pointer;" class="icon_holder" onclick="addPatch()">
-                    <span class="material-symbols-outlined">add</span> Add
-                </button>
-            </td>
+            <td colspan="4"><button style="width: 100%; padding: 10px; font-size: 1em; cursor: pointer;" onclick="addPatch()">Add</button></td>
         </tr>
     </tfoot>
     </table>
 <hr>
-<button onclick="generateXML()" class="icon_holder"><span class="material-symbols-outlined">download</span>Generate <code>modding.xml</code> file</button>
+<button onclick="generateXML()">Generate <code>modding.xml</code> file</button>
     </div>
     <p style="color: rgb(85, 85, 85); font-size: 0.9em; margin-top: 10px; margin-left: 20px; margin-bottom: 25px;" id="cright">
         MiscTools - Created by DELTAModders
@@ -95,57 +89,17 @@
 <script>
     var cachedpatches = [];
 
-var hasCSXSupport = true;
-
-async function addPatch() {
+function addPatch() {
     var uid = Date.now().toString() + Math.floor(Math.random() * 1000).toString();
 
     var tbody = document.getElementById('patchBody');
     var newRow = document.createElement('tr');
     
     var td0 = document.createElement('td');
-    td0.style.display = 'flex';
-    td0.style.gap = '5px';
-    td0.style.alignItems = 'center';
     var select0 = document.createElement('select');
     select0.name = 'patchtype';
-    select0.innerHTML = `
-    <option value="xdelta">Apply .xdelta</option>
-    <option value="g3mpatch">Apply .g3mpatch</option>
-    <option value="csx">Apply .csx</option>
-    <option value="override">Override file</option>
-    <option value="copy">Copy file</option>
-    <option value="unrecognized" style="display: none;">Unrecognized</option>
-    `;
+    select0.innerHTML = '<option value="xdelta">XDelta (or other supported patching file)</option><option value="override">Copy file to</option>';
     td0.appendChild(select0);
-
-    select0.onchange = function() {
-        var selectedType = select0.value;
-        if (selectedType === 'unrecognized') {
-            select0.style.backgroundColor = '#7b0000';
-        }
-        else {
-            select0.style.backgroundColor = '';
-        }
-    }
-
-    var questionMark = document.createElement('button');
-    questionMark.type = 'button';
-    questionMark.innerText = '?';
-    questionMark.className = 'circle_button'; 
-    td0.appendChild(questionMark);
-
-    questionMark.onclick = async function() {
-        var descs = {
-            'xdelta': 'A .xdelta file that will be applied to the source file to produce the destination file.',
-            'override': 'A file that will directly replace the source file without any patching. The source file will be ignored.',
-            'copy': 'A file that will be copied to the destination path.',
-            'g3mpatch': 'A .g3mpatch file that will be applied to the source file to produce the destination file.',
-            'csx': 'An UTMT script which will be executed to get the resulting data.win file.'
-        };
-        var selectedType = select0.value;
-        await smalltalk.alert('Patch type: <code>' + selectedType + '</code>', descs[selectedType] || 'No description available for this patch type.');
-    };
 
     var td1 = document.createElement('td');
     var input1 = document.createElement('input');
@@ -180,12 +134,9 @@ async function addPatch() {
     newRow.appendChild(td2);
     newRow.appendChild(td3);
     tbody.appendChild(newRow);
-
-    newRow.style.animation = 'objFadeIn 0.5s ease-out forwards';
 }
 
-
-async function generateXML() {
+function generateXML() {
     function i(id) {
         return document.getElementById(id).value;
     }
@@ -194,13 +145,7 @@ async function generateXML() {
 
     var doc = document.implementation.createDocument("", "", null);
 
-    if (cachedpatches.length == 0) {
-        await smalltalk.alert("No patches added", "Please add at least one patch before generating the XML.");
-        return;
-    }
-
-    for (var idx = 0; idx < cachedpatches.length; idx++) {
-        var entry = cachedpatches[idx];
+    cachedpatches.forEach(function (entry) {
         var fromInput = entry.from;
         var toInput = entry.to;
         if (!fromInput || !toInput) return;
@@ -208,11 +153,6 @@ async function generateXML() {
         var row = fromInput.closest('tr');
         var typeSelect = row ? row.querySelector('select[name="patchtype"]') : null;
         var typeVal = typeSelect ? typeSelect.value : 'xdelta';
-
-        if (typeVal == 'unrecognized') {
-            await smalltalk.alert("Unrecognized patch type", "One of the patches has an unrecognized type. Please correct it before generating the XML.");
-            return;
-        }
 
         var fromVal = fromInput.value.trim();
         var toVal = toInput.value.trim();
@@ -225,7 +165,7 @@ async function generateXML() {
         
         var patchString = new XMLSerializer().serializeToString(patchEl);
         str += patchString + "\n";
-    }
+    });
 
     var blob = new Blob([str], { type: 'application/xml' });
     var url = URL.createObjectURL(blob);
@@ -236,66 +176,6 @@ async function generateXML() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-}
-
-async function loadXML() {
-    var xml = await new Promise((resolve) => {
-        var input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.xml';
-        input.style.display = 'none';
-        document.body.appendChild(input);
-        input.onchange = function() {
-            var file = input.files[0];
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                xmlText = e.target.result;
-                resolve(xmlText);
-            };
-            reader.readAsText(file);
-        };
-        input.click();
-    });
-
-    function getAttr(tagText, attrName) {
-        var match = tagText.match(new RegExp(attrName + '\\s*=\\s*["\']([^"\']*)["\']', 'i'));
-        return match ? match[1] : '';
-    }
-
-    var tbody = document.getElementById('patchBody');
-    if (tbody) tbody.innerHTML = '';
-    cachedpatches = [];
-
-    var patchRegex = /<patch\b([^>]*)\/?>/gi;
-    var match;
-    while ((match = patchRegex.exec(xml)) !== null) {
-        var attrs = match[1] || '';
-        var typeVal = getAttr(attrs, 'type') || 'xdelta';
-        var fromVal = getAttr(attrs, 'patch');
-        var toVal = getAttr(attrs, 'to');
-
-        await addPatch();
-
-        var entry = cachedpatches[cachedpatches.length - 1];
-        if (!entry) continue;
-
-        var row = entry.from ? entry.from.closest('tr') : null;
-        var typeSelect = row ? row.querySelector('select[name="patchtype"]') : null;
-        if (['xdelta', 'override', 'copy', 'g3mpatch', 'csx'].indexOf(typeVal) === -1) {
-            typeVal = 'unrecognized';
-            typeSelect.style.backgroundColor = '#7b0000';
-        }
-        if (typeVal == 'csx' && !hasCSXSupport) {
-            typeVal = 'unrecognized';
-            typeSelect.style.backgroundColor = '#7b0000';
-            await smalltalk.alert("CSX support not enabled", "This XML contains a patch of type 'csx', but CSX support is not enabled in this session.");
-        }
-        if (typeSelect) typeSelect.value = typeVal;
-        entry.from.value = fromVal;
-        entry.to.value = toVal;
-    }
-
-    
 }
 </script>
 </html>

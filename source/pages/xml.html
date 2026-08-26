@@ -1,8 +1,10 @@
 <b>Generate a <code>modding.xml</code> file</b>
-<br><br>
-<i>Before proceeding with making a modding.xml, we ask you to read the Deltamod Modding Standard</i>
 <br>
 <hr>
+<button class="icon_holder" onclick="loadXML()">
+    <icon_upload></icon_upload> Import existing <code>modding.xml</code> file
+</button>
+<br>
 <table>
     <colgroup>
         <col style="width: 15%;">
@@ -23,9 +25,13 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="4"><button style="width: 100%; padding: 10px; font-size: 1em; cursor: pointer;" onclick="addPatch()">Add</button></td>
+            <td colspan="4">
+                <button style="width: 100%; padding: 10px; font-size: 1em; cursor: pointer;" class="icon_holder" onclick="addPatch()">
+                    <icon_add></icon_add> Add
+                </button>
+            </td>
         </tr>
     </tfoot>
     </table>
 <hr>
-<button onclick="generateXML()">Generate <code>modding.xml</code> file</button>
+<button onclick="generateXML()" class="icon_holder"><icon_download></icon_download>Generate <code>modding.xml</code> file</button>

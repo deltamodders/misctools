@@ -1,10 +1,29 @@
 var cachedneededfiles = [];
 
-function addNeededFile(fillName = '', fillHash = '', askQuest = true) {
+function poc(func, ...args) {
+    return new Promise((resolve) => {
+        func(...args).then(() => {
+            resolve(true);
+        }).catch(() => {
+            resolve(false);
+        });
+    });
+}
+
+async function addNeededFile(fillName = '', fillHash = '', askQuest = true) {
     var uid = Date.now().toString() + Math.floor(Math.random() * 1000).toString();
 
     if (askQuest) {
-        var importFile = window.confirm('Do you want to import a file to fill in its path and hash? Click "Cancel" to add an empty entry.');
+        var importFile = await poc(smalltalk.alert,
+            'Question',
+            'Do you want to import a file to fill in its path and hash?',
+            {
+                buttons: {
+                    ok: 'Yes',
+                    cancel: 'No',
+                }
+            }
+        );
         if (importFile) {
             var fileInput = document.createElement('input');
             fileInput.type = 'file';
@@ -19,7 +38,7 @@ function addNeededFile(fillName = '', fillHash = '', askQuest = true) {
 
                     addNeededFile(fillName, fillHash, false);
 
-                    window.alert('File imported successfully!\n\nNote that the path generated supposes the file will be in the root of the mod package.');
+                    await smalltalk.alert('Alert', 'File imported successfully!\n\nNote that the path generated supposes the file will be in the root of the mod package.');
                 }
             };
             fileInput.click();
@@ -64,6 +83,168 @@ function addNeededFile(fillName = '', fillHash = '', askQuest = true) {
     newRow.appendChild(td2);
     newRow.appendChild(td3);
     tbody.appendChild(newRow);
+
+    newRow.style.animation = 'objFadeIn 0.5s ease-out forwards';
+}
+
+async function fillInFromObject(obj, toml) {
+    function setValue(id, value) {
+        var el = document.getElementById(id);
+        if (el) el.value = value ?? '';
+    }
+
+    function setCheckboxesByValue(name, values) {
+        var set = new Set(Array.isArray(values) ? values : []);
+        document.querySelectorAll(`input[name="${name}"]`).forEach(cb => {
+            cb.checked = set.has(cb.dataset.value);
+        });
+    }
+
+    function splitPackageID(packageID) {
+        var parts = String(packageID || '').split('.');
+        return [parts[0] || '', parts[1] || '', parts[2] || ''];
+    }
+
+    var metadata = obj && obj.metadata ? obj.metadata : {};
+    var color = toml ? metadata.color : obj.color;
+    if (!color && metadata.color) color = metadata.color;
+
+    setValue('metadata.name', metadata.name);
+    setValue('metadata.version', metadata.version);
+    setValue('metadata.description', metadata.description);
+    setValue('metadata.authors', Array.isArray(metadata.author) ? metadata.author.join(', ') : (metadata.author ?? ''));
+    setValue('metadata.url', metadata.url);
+    setValue('metadata.game', metadata.game || 'toby.deltarune');
+
+    var packageParts = splitPackageID(metadata.packageID);
+    setValue('metadata.packageID.1', packageParts[0]);
+    setValue('metadata.packageID.2', packageParts[1]);
+    setValue('metadata.packageID.3', packageParts[2]);
+
+    if (color && typeof color === 'object') {
+        var hex = `#${((1 << 24) + ((color.r || 0) << 16) + ((color.g || 0) << 8) + (color.b || 0)).toString(16).slice(1)}`;
+        setValue('metadata.color', hex);
+    }
+
+    setCheckboxesByValue('metadata.tags', metadata.tags);
+    setValue('deltaruneTargetVersion', obj.deltaruneTargetVersion);
+
+    toggleDhubVER();
+    
+    var tbody = document.getElementsByTagName('tbody')[0];
+    if (tbody) tbody.innerHTML = '';
+    cachedneededfiles = [];
+
+    var neededFiles = Array.isArray(obj.neededFiles) ? obj.neededFiles : [];
+    for (var i = 0; i < neededFiles.length; i++) {
+        var entry = neededFiles[i] || {};
+        await addNeededFile(entry.file || '', entry.checksum || '', false);
+    }
+}
+
+async function importMeta() {
+    var format = await poc(smalltalk.alert,
+        'Question',
+        'Do you want to import a <code>meta.json</code> or a <code>meta.toml</code> file?',
+        {
+            buttons: {
+                ok: 'JSON',
+                cancel: 'TOML',
+            }
+        }
+    );
+
+    var fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = format ? '.json' : '.toml';
+    fileInput.onchange = function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                if (format) {
+                    var jsonData = JSON.parse(content);
+                    fillInFromObject(jsonData, false);
+                } else {
+                    var tomlData = window.TOML.parse(content);
+                    fillInFromObject(tomlData, true);
+                }
+            };
+            reader.readAsText(file);
+        }
+    };
+    fileInput.click();
+}
+
+function getPredominantColor(img) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const width = canvas.width = 256;
+    const height = canvas.height = 256;
+
+    ctx.drawImage(img, 0, 0, width, height);
+
+    const imageData = ctx.getImageData(0, 0, width, height);
+    const data = imageData.data;
+
+    const colorCount = {};
+    for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const key = `${r},${g},${b}`;
+        colorCount[key] = (colorCount[key] || 0) + 1;
+    }
+
+    let top = null;
+    let second = null;
+    for (const [key, count] of Object.entries(colorCount)) {
+        if (!top || count > top.count) {
+            second = top;
+            top = { key, count };
+        } else if (!second || count > second.count) {
+            second = { key, count };
+        }
+    }
+
+    const parseKey = (k) => {
+        const [r, g, b] = k.split(',').map(Number);
+        return { r, g, b };
+    };
+
+    const isBlackOrWhite = ({ r, g, b }, tol = 16) => {
+        const isBlack = r <= tol && g <= tol && b <= tol;
+        const isWhite = r >= 255 - tol && g >= 255 - tol && b >= 255 - tol;
+        return isBlack || isWhite;
+    };
+
+    let dominantColor = top ? parseKey(top.key) : { r: 0, g: 0, b: 0 };
+    if (top && isBlackOrWhite(dominantColor) && second) {
+        dominantColor = parseKey(second.key);
+    }
+
+    return dominantColor;
+}
+
+function calculateDCI() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.onchange = function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const img = new Image();
+            img.onload = function() {
+                const color = getPredominantColor(img);
+                const hexColor = `#${((1 << 24) + (color.r << 16) + (color.g << 8) + color.b).toString(16).slice(1)}`;
+                document.getElementById('metadata.color').value = hexColor;
+            };
+            img.src = URL.createObjectURL(file);
+        }
+    };
+    fileInput.click();
 }
 
 function metaColorBlack() {
@@ -83,7 +264,7 @@ async function sha256(msgBuffer) {
 }
 
 
-function generateJSON() {
+async function generateJSON(toml = false) {
     function i(id) {
         return document.getElementById(id).value;
     }
@@ -110,14 +291,14 @@ function generateJSON() {
         i('metadata.authors').trim().length === 0 ||
         i('metadata.game').trim() == 'null'
     ) {
-        alert('Please fill in all required metadata fields (Name, Version, Description, Authors, Game).');
+        await smalltalk.alert('Alert', 'Please fill in all required metadata fields (Name, Version, Description, Authors, Game).');
         return;
     }
 
     if (i('metadata.packageID.1').trim().length === 0 ||
         i('metadata.packageID.2').trim().length === 0 ||
         i('metadata.packageID.3').trim().length === 0) {
-        alert('Please fill in all parts of the Package ID.');
+        await smalltalk.alert('Alert', 'Please fill in all parts of the Package ID.');
         return;
     }
 
@@ -126,19 +307,28 @@ function generateJSON() {
             name: i('metadata.name'),
             version: i('metadata.version'),
             description: i('metadata.description'),
+            ai: i('metadata.ai') || 'no',
             author: i('metadata.authors').split(',').map(s => s.trim()).filter(s => s.length > 0),
             url: i('metadata.url'),
-            color: { r: colorValue.r, g: colorValue.g, b: colorValue.b },
+            color: toml ? "" : { r: colorValue.r, g: colorValue.g, b: colorValue.b },
             tags: document.querySelectorAll('input[name="metadata.tags"]:checked').length > 0 ? Array.from(document.querySelectorAll('input[name="metadata.tags"]:checked')).map(cb => cb.dataset.value) : undefined,
             game: i('metadata.game') || 'toby.deltarune',
             packageID: i('metadata.packageID.1') + '.' + i('metadata.packageID.2') + '.' + i('metadata.packageID.3')
         },
+        color: toml ? { r: colorValue.r, g: colorValue.g, b: colorValue.b } : "",
         deltaruneTargetVersion: i('deltaruneTargetVersion'),
         neededFiles: [],
         exporter: {
             tool: 'MiscTools'
         }
     };
+
+    if (toml) {
+        delete compiledJSON.metadata.color;
+    }
+    else {
+        delete compiledJSON.color;
+    }
 
     cachedneededfiles.forEach(item => {
         var path = item.pathInput.value.trim();
@@ -148,24 +338,40 @@ function generateJSON() {
         }
     });
 
-    var jsonOutput = JSON.stringify(compiledJSON, null, 4);
-    
-    var blob = new Blob([jsonOutput], { type: 'application/json' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'meta.json';
-    a.click();
-    URL.revokeObjectURL(url);
+    if (toml) {
+        var tomlOutput = window.TOML.stringify(compiledJSON);
+
+        var blob = new Blob([tomlOutput], { type: 'application/toml' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'meta.toml';
+        a.click();
+        URL.revokeObjectURL(url);
+    } else {
+        var jsonOutput = JSON.stringify(compiledJSON, null, 4);
+
+        var blob = new Blob([jsonOutput], { type: 'application/json' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'meta.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
 }
 
 function toggleDhubVER() {
     var gameSelect = document.getElementById('metadata.game');
     var dhubVerDiv = document.querySelector('.deltahubTargetVer');
+    var dhubIncomp = document.querySelector('.deltahubIncompatible');
     if (gameSelect.value === 'toby.deltarune' || gameSelect.value === 'toby.deltarune.demo') {
         dhubVerDiv.style.display = 'block';
+        dhubIncomp.style.display = 'none';
+        
     } else {
         dhubVerDiv.style.display = 'none';
+        dhubIncomp.style.display = 'block';
         document.getElementById('deltaruneTargetVersion').value = '';
     }
 }

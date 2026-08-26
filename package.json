@@ -16,6 +16,7 @@
   "main": "buildMisctools.js",
   "scripts": {
     "build": "node buildMisctools.js",
+    "deploy": "node buildMisctools.js --deploy",
     "test": "node buildMisctools.js --serve"
   },
   "dependencies": {
