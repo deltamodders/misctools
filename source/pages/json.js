@@ -14,17 +14,22 @@ async function addNeededFile(fillName = '', fillHash = '', askQuest = true) {
     var uid = Date.now().toString() + Math.floor(Math.random() * 1000).toString();
 
     if (askQuest) {
-        var importFile = await poc(smalltalk.alert,
+        var importFile = await htmlAlertRaw(
             'Question',
             'Do you want to import a file to fill in its path and hash?',
-            {
-                buttons: {
-                    ok: 'Yes',
-                    cancel: 'No',
+            [
+                {
+                    text: 'Yes',
+                    resolveWith: 'y'
+                },
+                {
+                    text: 'No',
+                    resolveWith: 'n'
                 }
-            }
+            ]
         );
-        if (importFile) {
+        if (importFile == 'y') {
+            console.log('User chose to import a file. Opening file dialog...');
             var fileInput = document.createElement('input');
             fileInput.type = 'file';
             fileInput.onchange = async function(event) {
@@ -38,10 +43,26 @@ async function addNeededFile(fillName = '', fillHash = '', askQuest = true) {
 
                     addNeededFile(fillName, fillHash, false);
 
-                    await smalltalk.alert('Alert', 'File imported successfully!\n\nNote that the path generated supposes the file will be in the root of the mod package.');
+                    await htmlAlertRaw(
+                        'Success',
+                        'File imported successfully!<br>Path: ' + fillName + '<br>SHA256 Hash: ' + fillHash,
+                        [
+                            {
+                                text: 'OK',
+                                resolveWith: true
+                            }
+                        ]
+                    );
                 }
             };
             fileInput.click();
+            return;
+        }
+        else {
+            console.log('User chose not to import a file. Proceeding with empty path and hash.');
+            fillName = '';
+            fillHash = '';
+            addNeededFile(fillName, fillHash, false);
             return;
         }
     }
@@ -143,15 +164,19 @@ async function fillInFromObject(obj, toml) {
 }
 
 async function importMeta() {
-    var format = await poc(smalltalk.alert,
+    var format = htmlAlertRaw(
         'Question',
         'Do you want to import a <code>meta.json</code> or a <code>meta.toml</code> file?',
-        {
-            buttons: {
-                ok: 'JSON',
-                cancel: 'TOML',
+        [
+            {
+                text: 'JSON',
+                resolveWith: true
+            },
+            {
+                text: 'TOML',
+                resolveWith: false
             }
-        }
+        ]
     );
 
     var fileInput = document.createElement('input');
@@ -291,14 +316,24 @@ async function generateJSON(toml = false) {
         i('metadata.authors').trim().length === 0 ||
         i('metadata.game').trim() == 'null'
     ) {
-        await smalltalk.alert('Alert', 'Please fill in all required metadata fields (Name, Version, Description, Authors, Game).');
+        await htmlAlertRaw('Alert', 'Please fill in all required fields.', [
+            {
+                text: 'OK',
+                resolveWith: true
+            }
+        ]);
         return;
     }
 
     if (i('metadata.packageID.1').trim().length === 0 ||
         i('metadata.packageID.2').trim().length === 0 ||
         i('metadata.packageID.3').trim().length === 0) {
-        await smalltalk.alert('Alert', 'Please fill in all parts of the Package ID.');
+        await htmlAlertRaw('Alert', 'Please fill in all parts of the Package ID.', [
+            {
+                text: 'OK',
+                resolveWith: true
+            }
+        ]);
         return;
     }
 

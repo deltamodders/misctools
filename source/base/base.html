@@ -24,21 +24,29 @@
         }
     </script>
 </head>
+<div class="bg"></div>
 <body>
     <div class="header">
-        <div>
-            <button onclick="history.back();" class="circle_button"><icon_arrow_back></icon_arrow_back></button>
-        </div>
-        <h1 id="h1title">$H1TITLE</h1>
-        <p style="margin-bottom: 0;" id="h1desc">$H1DESC</p>
+        <img src="/favicon.png" alt="MiscTools Logo" style="cursor: pointer; width: 30px; height: 30px; margin-left: 10px;" onclick="window.location.href = './index.html'">
+        <span style="font-size: 1.1em; margin-left: 20px;">$H1TITLE</span>
     </div>
     <div class="main" style="overflow-y: scroll;">
         $CONTENT
     </div>
-    <p style="color: rgb(85, 85, 85); font-size: 0.9em; margin-top: 10px; margin-left: 20px; margin-bottom: 25px;" id="cright">
-        MiscTools - Created by DELTAModders
-    </p>
+    <span style="color: rgb(255,255,255); font-size: 0.9em; display: block; margin-top: 5px; margin-left: 20px; margin-bottom: 25px;" id="cright">
+        &copy; 2026 DELTAModders<br>
+        $BUILDMETA
+    </span>
 </body>
+<div class="alertMain" style="display: none;">
+    <div class="alertMsg">
+        <h1>Example Alert</h1>
+        <p>This alert is an <b>example</b>.</p>
+        <div style="text-align: right;">
+            <button>OK</button>
+        </div>
+    </div>
+</div>
 <!-- service worker -->
 <script>
     if ('serviceWorker' in navigator) {
@@ -55,7 +63,6 @@
     }
 
 </script>
-<script src="smalltalk.min.js"></script>
 <script>
     $CODE
 </script>

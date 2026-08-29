@@ -37,6 +37,7 @@ fs.mkdirSync('./dist');
 
     for (const pageFile of pages) {
         const baseHTML = fs.readFileSync('./source/base/base.html', 'utf-8');
+        const baseJS = fs.readFileSync('./source/base/base.js', 'utf-8');
 
         const pageattr = JSON.parse(fs.readFileSync(pagesDir + pageFile, 'utf-8'));
         const pageContent = fs.readFileSync(pagesDir + pageFile.replace('.pageattr','.html'), 'utf-8');
@@ -47,9 +48,10 @@ fs.mkdirSync('./dist');
             .replaceAll('$H1TITLE', pageattr.h1title)
             .replaceAll('$H1DESC', pageattr.h1desc)
             .replaceAll('$CONTENT', pageContent)
-            .replaceAll('$CODE', pageScript)
+            .replaceAll('$CODE', baseJS + '\n\n// Start of page code\n\n' + pageScript)
             .replaceAll('$INTERNALNAME', pageFile.replace('.pageattr', ''))
-            .replaceAll('$GENMETA', buildNote);
+            .replaceAll('$GENMETA', buildNote)
+            .replaceAll('$BUILDMETA', 'MiscTools - Build no. ' + (execSync('git rev-list --count HEAD').toString().trim()) + ' - commit ' + execSync('git rev-parse HEAD').toString().trim().substring(0, 5));
 
         
         
