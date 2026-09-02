@@ -107,11 +107,11 @@ setTimeout(async () => {
     var ad = document.querySelector('iframe[title="BidVertiser advertisement"]');
 
     if (!ad) {
-        await htmlAlertRaw(
+        /**await htmlAlertRaw(
             'Adblocks', 
             'We have detected that you have an adblocker. That\'s not a problem, but if you disable it, it would help us out a lot. Please disable your adblocker!', 
             [{ text: 'OK', resolveWith: true }],
              'warning'
-        );
+        );*/
     }
 }, 2000);
