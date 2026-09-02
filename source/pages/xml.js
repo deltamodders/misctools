@@ -49,7 +49,12 @@ async function addPatch() {
             'csx': 'An UTMT script which will be executed to get the resulting data.win file.'
         };
         var selectedType = select0.value;
-        await smalltalk.alert('Patch type: <code>' + selectedType + '</code>', descs[selectedType] || 'No description available for this patch type.');
+        await htmlAlertRaw('Patch description', descs[selectedType] || 'No description available for this patch type.', [
+            {
+                text: 'OK',
+                resolveWith: true
+            }
+        ]);
     };
 
     var td1 = document.createElement('td');
@@ -100,7 +105,12 @@ async function generateXML() {
     var doc = document.implementation.createDocument("", "", null);
 
     if (cachedpatches.length == 0) {
-        await smalltalk.alert("No patches added", "Please add at least one patch before generating the XML.");
+        await htmlAlertRaw("No patches added", "Please add at least one patch before generating the XML.", [
+            {
+                text: 'OK',
+                resolveWith: true
+            }
+        ]);
         return;
     }
 
@@ -115,7 +125,12 @@ async function generateXML() {
         var typeVal = typeSelect ? typeSelect.value : 'xdelta';
 
         if (typeVal == 'unrecognized') {
-            await smalltalk.alert("Unrecognized patch type", "One of the patches has an unrecognized type. Please correct it before generating the XML.");
+            await htmlAlertRaw("Unrecognized patch type", "One of the patches has an unrecognized type. Please correct it before generating the XML.", [
+                {
+                    text: 'OK',
+                    resolveWith: true
+                }
+            ]);
             return;
         }
 
@@ -189,11 +204,6 @@ async function loadXML() {
         if (['xdelta', 'override', 'copy', 'g3mpatch', 'csx'].indexOf(typeVal) === -1) {
             typeVal = 'unrecognized';
             typeSelect.style.backgroundColor = '#7b0000';
-        }
-        if (typeVal == 'csx' && !hasCSXSupport) {
-            typeVal = 'unrecognized';
-            typeSelect.style.backgroundColor = '#7b0000';
-            await smalltalk.alert("CSX support not enabled", "This XML contains a patch of type 'csx', but CSX support is not enabled in this session.");
         }
         if (typeSelect) typeSelect.value = typeVal;
         entry.from.value = fromVal;

@@ -1,0 +1,182 @@
+<!-- Generated at compile-time by MiscTools Builder on 2026-09-01T13:09:56.640Z -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <title>Deltamod MiscTools - Create Deltamod modpack</title>
+    <link rel="stylesheet" href="automake.css">
+    <link rel="manifest" href="./manifest.json">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1140866019177241" crossorigin="anonymous"></script>
+    
+    <script type="module"> 
+        import smolToml from 'https://cdn.jsdelivr.net/npm/smol-toml@1.7.0/+esm';
+        window.TOML = {
+            parse: smolToml.parse,
+            stringify: smolToml.stringify
+        }
+    </script>
+
+    <!-- Begin BidVertiser code -->
+    <SCRIPT data-cfasync="false" SRC="//bdv.bidvertiser.com/BidVertiser.dbm?pid=943234&bid=2106771" TYPE="text/javascript"></SCRIPT>
+    <!-- End BidVertiser code --> 
+</head>
+<div class="bg"></div>
+<body>
+    <div class="header">
+        <img src="./favicon.png" alt="MiscTools Logo" style="cursor: pointer; width: 30px; height: 30px; margin-left: 10px;" onclick="window.location.href = './index.html'">
+        <span style="font-size: 1.1em; margin-left: 20px;">Create Deltamod modpack</span>
+    </div>
+    <div class="main" style="overflow-y: scroll;">
+        <div class="buttonsBox">
+    
+</div>
+    </div>
+    <span style="color: rgb(255,255,255); font-size: 0.9em; display: block; margin-top: 5px; margin-left: 20px; margin-bottom: 25px;" id="cright">
+        &copy; 2026 DELTAModders<br>
+        MiscTools - Build no. 21 - commit 3050b
+    </span>
+</body>
+<div class="alertMain" style="display: none;">
+    <div class="alertMsg">
+        <h1>Example Alert</h1>
+        <p>This alert is an <b>example</b>.</p>
+        <div style="text-align: right;">
+            <button>OK</button>
+        </div>
+    </div>
+</div>
+<!-- service worker -->
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker
+                .register('/worker.js')
+                .then((registration) => {
+                    console.log('Service Worker registered with scope: ', registration.scope);
+                })
+                .catch((error) => {
+                    console.log('Service Worker registration failed: ', error);
+                });
+        });
+    }
+
+</script>
+<script>
+    let isAlertShowing = false;
+
+async function htmlAlertRaw(title, message, buttons, specialIcon = 'info') {
+    return new Promise(async (resolve, reject) => {
+        isAlertShowing = true;
+        var alertMain = document.getElementsByClassName('alertMain')[0];
+        var alertMsgR = alertMain.getElementsByClassName('alertMsg')[0];
+
+        var animOptions = 'cubic-bezier(0.16, 1, 0.3, 1) forwards';
+        var animLength = 0.6;
+
+        alertMsgR.innerHTML = '';
+
+        // Container
+        var alertMsg = document.createElement('div');
+        alertMsgR.appendChild(alertMsg);
+
+        // Title
+        var titleElement = document.createElement('h1');
+        titleElement.innerText = title;
+        titleElement.style.opacity = '0';
+        
+        // Message
+        var messageElement = document.createElement('p');
+        messageElement.innerHTML = message.replace(/\n/g, '<br>');
+        messageElement.style.opacity = '0';
+        
+        alertMsg.appendChild(titleElement);
+        alertMsg.appendChild(messageElement);
+
+        // Buttons
+        var buttonsHTML = document.createElement('div');
+        buttonsHTML.style.textAlign = 'right';
+        buttonsHTML.classList.add('alertButtons');
+        buttonsHTML.style.opacity = '0';
+        buttonsHTML.style.display = 'flex';
+        buttonsHTML.style.gap = '8px';
+        buttonsHTML.style.justifyContent = 'flex-end';
+        
+
+        buttons.forEach((button) => {
+            var btn = document.createElement('button');
+            btn.textContent = button.text;
+            btn.style.flex = '1 1 0';
+            btn.onclick = function() {
+                // Outro animation
+                alertMsgR.style.animation = `${animLength}s alertFadeOut ${animOptions}`;
+                setTimeout(() => {
+                    alertMain.style.animation = '';
+                    alertMain.style.display = 'none';
+                    alertMsgR.style.animation = `${animLength}s alertFadeIn ${animOptions}`;
+                    alertMsgR.innerHTML = '';
+                }, 300);
+                
+                isAlertShowing = false;
+                
+                // Play dismiss SFX
+                var a = new Audio();
+                a.src = 'ha2.mp3';
+                a.play();
+                console.log('Alert dismissed.');
+
+                // Resolve/Reject
+                if (button.resolveWith) {
+                    resolve(button.resolveWith);
+                    return;
+                }
+                if (button.rejectWith) {
+                    reject(button.rejectWith);
+                    return;
+                }
+                if (button.onClick) button.onClick();
+            };
+            buttonsHTML.appendChild(btn);
+        });
+
+        alertMain.style.display = 'flex';
+        alertMsg.appendChild(buttonsHTML);
+
+        // Special Background Icon
+        var bigIcon = document.createElement('span');
+        bigIcon.classList.add('material-symbols-outlined', 'alertBigIcon');
+        bigIcon.innerText = specialIcon;
+        bigIcon.style.fontSize = '490px';
+        bigIcon.style.position = 'absolute';
+        bigIcon.style.top = '-140px';
+        bigIcon.style.right = '-50px';
+        bigIcon.style.opacity = '0.1';
+        bigIcon.style.userSelect = 'none';
+        bigIcon.style.pointerEvents = 'none';
+        alertMsgR.appendChild(bigIcon);
+
+        // Cascade Intro Animations
+        setTimeout(() => { titleElement.style.animation = `${animLength*1.2}s stuffFadeIn ${animOptions}`; }, 200);
+        setTimeout(() => { messageElement.style.animation = `${animLength*1.2}s stuffFadeIn ${animOptions}`; }, 300);
+        setTimeout(() => { buttonsHTML.style.animation = `${animLength*1.2}s stuffFadeIn ${animOptions}`; }, 400);
+
+        // Play alert SFX
+        var a = new Audio();
+        a.src = 'ha1.mp3';
+        a.playbackRate = 0.9;
+        a.play();
+    });
+}
+
+// Start of page code
+
+
+</script>
+</html>
