@@ -400,7 +400,7 @@ function toggleDhubVER() {
     var gameSelect = document.getElementById('metadata.game');
     var dhubVerDiv = document.querySelector('.deltahubTargetVer');
     var dhubIncomp = document.querySelector('.deltahubIncompatible');
-    if (gameSelect.value === 'toby.deltarune' || gameSelect.value === 'toby.deltarune.demo') {
+    /**if (gameSelect.value !== null) {
         dhubVerDiv.style.display = 'block';
         dhubIncomp.style.display = 'none';
         
@@ -408,5 +408,8 @@ function toggleDhubVER() {
         dhubVerDiv.style.display = 'none';
         dhubIncomp.style.display = 'block';
         document.getElementById('deltaruneTargetVersion').value = '';
-    }
+    }*/
+    // Removed incompatible message for now, as G3M supports all games MiscTools does. It will be re-added if needed in the future.
+    dhubVerDiv.style.display = 'block';
+    dhubIncomp.style.display = 'none';
 }

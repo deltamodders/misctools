@@ -113,6 +113,16 @@ deltamod-icon {
     display: inline-block;
 }
 
+gm3p-icon {
+    width: 15px;
+    height: 15px;
+    vertical-align: middle;
+    background-image: url('gm3p.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+
 input:not([type="checkbox"]), textarea, select {
     display: block;
     margin-top: 5px;
