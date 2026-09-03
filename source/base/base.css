@@ -113,6 +113,16 @@ deltamod-icon {
     display: inline-block;
 }
 
+gm3p-icon {
+    width: 15px;
+    height: 15px;
+    vertical-align: middle;
+    background-image: url('gm3p.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+
 input:not([type="checkbox"]), textarea, select {
     display: block;
     margin-top: 5px;
@@ -152,9 +162,8 @@ input:not([type="checkbox"]), textarea, select {
 
 iframe[title="BidVertiser advertisement"] {
     z-index: 100;
-    position: fixed;
+    position: center;
     bottom: 40px;
-    left: 50px;
     anchor-name: --ad-anchor;
 }
 
