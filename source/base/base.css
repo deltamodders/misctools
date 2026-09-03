@@ -162,9 +162,8 @@ input:not([type="checkbox"]), textarea, select {
 
 iframe[title="BidVertiser advertisement"] {
     z-index: 100;
-    position: fixed;
+    position: center;
     bottom: 40px;
-    left: 50px;
     anchor-name: --ad-anchor;
 }
 
