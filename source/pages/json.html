@@ -18,7 +18,6 @@
         <option value="partial">Partially AI-assisted</option>
         <option value="fully">Fully AI-generated</option>
     </select>
-    </select>
     <p><deltamod-icon></deltamod-icon> <gm3p-icon></gm3p-icon> <b>Package ID</b></p>
     <div class="pid" style="display: flex; justify-content: left; align-items: center;">
         <input type="text" placeholder="website" id="metadata.packageID.1" oninput="lowercase(this)">
@@ -42,18 +41,20 @@
         <option value="fans.utyellow">Undertale Yellow</option>
         <option value="other.pizzatower">Pizza Tower</option>
     </select>
-    <div style="display: none;">
-        <h4>G3M exclusive fields</h4>
-        <p><deltahub-icon></deltahub-icon> <gm3p-icon></gm3p-icon> <b>DELTARUNE target version</b></p>
-        <input type="text" placeholder="Target DELTARUNE version" id="deltaruneTargetVersion">
-        <p><deltahub-icon></deltahub-icon> <b>Mod tags</b></p>
-        <div class="checkboxArray">
-            <label><input type="checkbox" name="metadata.tags" data-value="translation"> translation</label>
-            <label><input type="checkbox" name="metadata.tags" data-value="text"> text</label>
-            <label><input type="checkbox" name="metadata.tags" data-value="customization"> customization</label>
-            <label><input type="checkbox" name="metadata.tags" data-value="gameplay"> gameplay</label>
-            <label><input type="checkbox" name="metadata.tags" data-value="other"> other</label>
-        </div>
+    <div style="display: block;" class="deltahubTargetVer">
+    <div class="deltahubTargetVer">
+            <h4>G3M exclusive fields</h4>
+            <p><deltahub-icon></deltahub-icon> <gm3p-icon></gm3p-icon> <b>DELTARUNE target version</b></p>
+            <input type="text" placeholder="Target DELTARUNE version" id="deltaruneTargetVersion">
+            <p><deltahub-icon></deltahub-icon> <b>Mod tags</b></p>
+            <div class="checkboxArray">
+                <label><input type="checkbox" name="metadata.tags" data-value="translation"> translation</label>
+                <label><input type="checkbox" name="metadata.tags" data-value="text"> text</label>
+                <label><input type="checkbox" name="metadata.tags" data-value="customization"> customization</label>
+                <label><input type="checkbox" name="metadata.tags" data-value="gameplay"> gameplay</label>
+                <label><input type="checkbox" name="metadata.tags" data-value="other"> other</label>
+            </div>
+    </div>
     </div>
     <div class="deltahubIncompatible" style="display: none;">
         <p class="red_box" style="display: flex; align-items: center; gap: 10px;">
