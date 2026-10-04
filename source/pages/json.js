@@ -412,4 +412,5 @@ function toggleDhubVER() {
     // Removed incompatible message for now, as G3M supports all games MiscTools does. It will be re-added if needed in the future.
     dhubVerDiv.style.display = 'block';
     dhubIncomp.style.display = 'none';
+    document.getElementById('deltaruneTargetVersion').value = '';
 }
